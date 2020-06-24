@@ -67,12 +67,34 @@ const (
 
 //CMark writer options for render functions
 const CMARK_OPT_DEFAULT = 0
-const CMARK_OPT_SOURCEPOS = 1
-const CMARK_OPT_HARDBREAKS = 2
-const CMARK_OPT_NORMALIZE = 4
-const CMARK_OPT_SMART = 8
-const CMARK_OPT_VALIDATE_UTF8 = 16
-const CMARK_OPT_SAFE = 32
+
+//Include a `data-sourcepos` attribute on all block elements.
+const CMARK_OPT_SOURCEPOS = (1 << 1)
+
+//Include a `data-sourcepos` attribute on all block elements.
+const CMARK_OPT_HARDBREAKS = (1 << 2)
+const CMARK_OPT_NORMALIZE = (1 << 8)
+
+/** Convert straight quotes to curly, --- to em dashes, -- to en dashes.
+ */
+const CMARK_OPT_SMART = (1 << 10)
+
+/** Validate UTF-8 in the input before parsing, replacing illegal
+ * sequences with the replacement character U+FFFD.
+ */
+const CMARK_OPT_VALIDATE_UTF8 = (1 << 9)
+
+/** Suppress raw HTML and unsafe links (`javascript:`, `vbscript:`,
+ * `file:`, and `data:`, except for `image/png`, `image/gif`,
+ * `image/jpeg`, or `image/webp` mime types).  Raw HTML is replaced
+ * by a placeholder HTML comment. Unsafe links are replaced by
+ * empty strings.
+ */
+const CMARK_OPT_SAFE = (1 << 3)
+
+/** Render `softbreak` elements as spaces.
+ */
+const CMARK_OPT_NOBREAKS = (1 << 4)
 
 //converts C int return codes to True/False :)
 func success(code C.int) bool {

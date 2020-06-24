@@ -40,7 +40,7 @@ type CMarkParser struct {
 
 type CMarkExtension struct {
 	*CMarkParser
-	//extension *C.struct_cmark_syntax_extension
+	opts       int
 	extensions *C.struct__cmark_llist
 }
 
@@ -65,7 +65,7 @@ func (cme *CMarkExtension) MarkdownToHtml(text string) string {
 	C.cmark_parser_feed(cme.parser, cstr, C.size_t(s))
 	node := cme.Finish()
 	defer node.Free()
-	output := C.cmark_render_html(node.node, C.int(0), cme.extensions)
+	output := C.cmark_render_html(node.node, C.int(cme.opts), cme.extensions)
 	defer C.free(unsafe.Pointer(output))
 	return C.GoString(output)
 }
@@ -79,6 +79,7 @@ func NewParserWithExts(options int, exts ...string) *CMarkExtension {
 	p := NewCmarkParser(options)
 	cme := &CMarkExtension{
 		CMarkParser: p,
+		opts:        options,
 	}
 	cme.ParserAttachExtension(exts...)
 	cme.ParserGetExtensions()
